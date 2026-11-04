@@ -1,7 +1,7 @@
 import React from "react";
 import { Composition } from "remotion";
 import { NikeShort, NIKE_FRAMES } from "./videos/nike/Nike";
-import { ParachuteShort, PARACHUTE_FRAMES } from "./videos/parachute/Parachute";
+import { ParachuteShort, PARACHUTE_FRAMES } from "./videos/parachute/Bridge";
 
 export const RemotionRoot: React.FC = () => (
   <>
