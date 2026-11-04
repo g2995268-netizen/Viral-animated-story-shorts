@@ -49,23 +49,28 @@ export type ShotDef = { id: number; a: number; b: number; light: Light; crowd: C
 const idn = (t: number) => t;
 const F = (sec: number) => Math.max(0, Math.round(sec * FPS) - 2);
 
+// Cuts land about 2 frames before the stressed word (F already subtracts those frames).
 export const SHOTS: ShotDef[] = [
-  { id: 1, a: 0, b: F(5.46), light: "day", crowd: "none", tau: idn },
-  { id: 2, a: F(5.46), b: F(11.2), light: "day", crowd: "none", tau: idn, towns: true },
-  { id: 3, a: F(11.2), b: F(15.7), light: "day", crowd: "none", tau: idn },
-  { id: 4, a: F(15.7), b: F(18.5), light: "day", crowd: "none", tau: idn },
-  { id: 5, a: F(18.5), b: F(22.3), light: "day", crowd: "none", tau: idn },
-  { id: 6, a: F(22.3), b: F(26.2), light: "day", crowd: "none", tau: idn, towns: true },
-  { id: 7, a: F(26.2), b: F(30.5), light: "day", crowd: "none", tau: idn },
-  { id: 8, a: F(30.5), b: F(40.5), light: "day", crowd: "none", tau: idn },
-  { id: 9, a: F(40.5), b: F(44.8), light: "golden", crowd: "none", tau: idn, sunAz: 40, sunEl: 22 },
-  { id: 10, a: F(44.8), b: F(48.5), light: "day", crowd: "none", tau: idn },
-  { id: 11, a: F(48.5), b: F(55.5), light: "day", crowd: "none", tau: idn },
-  { id: 12, a: F(55.5), b: F(63.1), light: "day", crowd: "none", tau: idn },
-  { id: 13, a: F(63.1), b: TOTAL, light: "golden", crowd: "none", tau: idn, sunAz: 130, sunEl: 18, towns: true },
+  { id: 1, a: 0, b: F(5.46), light: "day", crowd: "none", tau: idn },                 // failed / sixty seconds
+  { id: 2, a: F(5.46), b: F(8.74), light: "day", crowd: "none", tau: idn, towns: true }, // Look / 3,300 m
+  { id: 3, a: F(8.74), b: F(15.06), light: "day", crowd: "none", tau: idn },          // 200 km/h, belly, handles
+  { id: 4, a: F(15.06), b: F(18.20), light: "day", crowd: "none", tau: idn },         // streamer
+  { id: 5, a: F(18.20), b: F(22.36), light: "day", crowd: "none", tau: idn },         // cutaway
+  { id: 6, a: F(22.36), b: F(25.96), light: "day", crowd: "none", tau: idn, towns: true }, // reserve, still a map
+  { id: 7, a: F(25.96), b: F(30.22), light: "day", crowd: "none", tau: idn },         // stay flat / head-down
+  { id: 8, a: F(30.22), b: F(40.62), light: "day", crowd: "none", tau: idn },         // lake and road
+  { id: 9, a: F(40.62), b: F(44.96), light: "golden", crowd: "none", tau: idn, sunAz: 40, sunEl: 18 }, // snow, slope, trees
+  { id: 10, a: F(44.96), b: F(48.64), light: "day", crowd: "none", tau: idn },        // car window
+  { id: 11, a: F(48.64), b: F(56.36), light: "day", crowd: "none", tau: idn },        // still fast, the box
+  { id: 12, a: F(56.36), b: F(60.64), light: "day", crowd: "none", tau: idn },        // reserve opens
+  { id: 13, a: F(60.64), b: TOTAL, light: "golden", crowd: "none", tau: idn, sunAz: 130, sunEl: 16, towns: true },
 ];
-export const XFADE: Record<number, number> = { 6: 8, 13: 8 };
+/** 5-frame dissolves on every angle change. The hook still ends on a white flash. */
+export const XFADE: Record<number, number> = { 2: 5, 3: 5, 4: 5, 5: 5, 6: 5, 7: 5, 8: 5, 9: 5, 10: 5, 11: 5, 12: 5, 13: 5 };
 export const FLASH_AT = F(5.46);
+export type Mood = "fall" | "day" | "warm";
+/** High fall is contrasty. The street stays noon. Snow and the ending go warm. */
+export const moodAt = (id: number): Mood => (id <= 7 || id === 11 ? "fall" : id === 9 || id === 13 ? "warm" : "day");
 
 export const shotAt = (f: number) => SHOTS.find((s) => f >= s.a && f < s.b) ?? SHOTS[SHOTS.length - 1];
 export const layersAt = (f: number): { id: number; alpha: number }[] => {
@@ -175,9 +180,27 @@ export const camAt = (id: number, f: number): Cam => {
       fov = 42;
       roll = 0.04;
   }
-  const n = Math.floor((t - 18.54) * FPS);
-  const kick = n >= 0 && n < 7 && id === 5 ? (n % 2 ? -1 : 1) * (1 - n / 7) ** 1.5 * 0.15 : 0;
-  return { pos, look, fov, roll: roll + kick * 0.15 };
+  // Air buffet so a hold is never a frozen frame. The car shot stays calmer.
+  const air = id === 10 ? 0.2 : id >= 12 ? 0.4 : 1;
+  const amp = 0.055 * air * (id === 7 ? 1.7 : 1);
+  pos = [
+    pos[0] + Math.sin(t * 14.2) * amp + Math.sin(t * 27.5 + 1.1) * amp * 0.35,
+    pos[1] + Math.sin(t * 9.6 + 0.4) * amp * 0.65,
+    pos[2] + Math.cos(t * 12.1) * amp * 0.45,
+  ];
+  roll += Math.sin(t * 8.4) * 0.02 * air;
+  const age = f - a0;
+  if (age >= 0 && age < 7 && id > 1) {
+    const hard = id === 5 || id === 7 || id === 12;
+    const s = (age % 2 ? -1 : 1) * (1 - age / 7) ** 1.6 * (hard ? 0.14 : 0.07);
+    roll += s;
+    pos = [pos[0] + s * 0.55, pos[1] - Math.abs(s) * 0.2, pos[2]];
+  }
+  const dive = t > 27.05 && t < 28.9 ? Math.sin(((t - 27.05) / 1.85) * Math.PI) : 0;
+  if (id === 7) roll += dive * 0.15;
+  const cut = Math.floor((t - 18.2) * FPS);
+  const kick = cut >= 0 && cut < 7 && id === 5 ? (cut % 2 ? -1 : 1) * (1 - cut / 7) ** 1.5 * 0.16 : 0;
+  return { pos, look, fov, roll: roll + kick };
 };
 
 export const dofAt = (f: number) => {

@@ -18,7 +18,7 @@ import { InkPass, noInkFallback } from "./ink";
 import { LensBlur, GrainEffect } from "./lensblur";
 import { GradeEffect, GRADES, GRADE_STRENGTH, gradeFor } from "./grade";
 import { Kit } from "./build";
-import { TOTAL, FLASH_AT, SHOTS, layersAt, dofAt } from "./story";
+import { TOTAL, FLASH_AT, FPS, layersAt, dofAt, moodAt } from "./story";
 
 export const BRIDGE_FRAMES = TOTAL;
 export const PARACHUTE_FRAMES = TOTAL;
@@ -81,7 +81,7 @@ const Inner: React.FC<{ id: number; kit: Kit }> = ({ id, kit }) => {
   if (d.focus) fpt.set(...d.focus(f)); else fpt.copy(target);
   fx.lens.focus = Math.max(0.3, fpt.sub(cam.position).dot(fwd));
   fx.lens.cInf = d.cInf;
-  gradeFor(fx.grade, SHOTS[id - 1].light);
+  gradeFor(fx.grade, moodAt(id));
   fx.grain.seed = f; // deterministic per frame
   return (
     <>
@@ -114,6 +114,55 @@ export const BridgeShort: React.FC = () => {
     <AbsoluteFill style={{ background: "#cfe3f2" }}>
       {layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} kit={kit} alpha={l.alpha} />)}
       {flash > 0 && <AbsoluteFill style={{ background: "#ffffff", opacity: flash }} />}
+      <Plates frame={f} />
+    </AbsoluteFill>
+  );
+};
+
+type Plate = { t0: number; t1: number; kicker: string; value: string; unit: string; side: "left" | "right" };
+const PLATES: Plate[] = [
+  { t0: 1.62, t1: 3.05, kicker: "TIME", value: "60", unit: "SECONDS", side: "left" },
+  { t0: 6.64, t1: 8.55, kicker: "ALTITUDE", value: "3,300", unit: "METERS", side: "right" },
+  { t0: 8.68, t1: 10.25, kicker: "SPEED", value: "200", unit: "KM/H", side: "left" },
+  { t0: 51.8, t1: 53.7, kicker: "THE BOX", value: "200", unit: "GRAMS", side: "right" },
+  { t0: 54.78, t1: 56.25, kicker: "ALTITUDE", value: "230", unit: "METERS", side: "left" },
+  { t0: 58.28, t1: 60.35, kicker: "TOO LATE", value: "40", unit: "METERS", side: "right" },
+];
+
+const Plates: React.FC<{ frame: number }> = ({ frame }) => {
+  const { height } = useVideoConfig();
+  const t = frame / FPS;
+  const s = height / 1920;
+  const plate = PLATES.find((p) => t >= p.t0 && t < p.t1);
+  if (!plate) return null;
+  const inn = Math.max(0, Math.min(1, (t - plate.t0) / 0.16));
+  const out = Math.max(0, Math.min(1, (plate.t1 - t) / 0.18));
+  const e = 1 - (1 - inn) ** 3;
+  const scale = inn < 1 ? 0.7 + 0.36 * e : 1;
+  const opacity = Math.min(1, inn * 5, out * 5);
+  const edge = Math.round(36 * s);
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", opacity }}>
+      <div style={{
+        position: "absolute",
+        top: Math.round(150 * s),
+        left: plate.side === "left" ? edge : undefined,
+        right: plate.side === "right" ? edge : undefined,
+        transform: `translateY(${(1 - e) * 28 * s}px) scale(${scale})`,
+        transformOrigin: plate.side === "left" ? "left top" : "right top",
+        background: "#f6f1e6",
+        color: "#241726",
+        border: `${Math.max(3, Math.round(8 * s))}px solid #241726`,
+        borderRadius: Math.round(28 * s),
+        padding: `${Math.round(16 * s)}px ${Math.round(28 * s)}px ${Math.round(18 * s)}px`,
+        boxShadow: `${Math.round(8 * s)}px ${Math.round(8 * s)}px 0 #241726`,
+        fontFamily: "Trebuchet MS, Arial Rounded MT Bold, sans-serif",
+        lineHeight: 0.9,
+      }}>
+        <div style={{ fontSize: Math.round(28 * s), letterSpacing: Math.round(3 * s), fontWeight: 700 }}>{plate.kicker}</div>
+        <div style={{ fontSize: Math.round(92 * s), fontWeight: 800, marginTop: Math.round(4 * s) }}>{plate.value}</div>
+        <div style={{ fontSize: Math.round(32 * s), fontWeight: 700, letterSpacing: Math.round(2 * s) }}>{plate.unit}</div>
+      </div>
     </AbsoluteFill>
   );
 };

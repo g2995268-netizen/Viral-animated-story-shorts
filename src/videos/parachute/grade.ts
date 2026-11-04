@@ -166,14 +166,30 @@ export const GRADE_GOLDEN2: GradeParams = {
   tintS: [0.02, 0.002], tintM: [0, 0], tintH: [-0.012, 0.006],
   vig: [0.2, 0.4],
 };
+/** Freefall: deeper shadows, cooler shade, a light vignette. */
+export const GRADE_FALL: GradeParams = {
+  ky: [0, 0.055, 0.2, 0.5, 0.86, 0.97, 1],
+  sat: [0.92, 1.16, 1.04],
+  tintS: [0.028, -0.012], tintM: [0.008, -0.004], tintH: [-0.006, 0.008],
+  vig: [0.22, 0.46],
+};
+/** Low golden beats: warmer, richer, shadows kept soft rather than crushed. */
+export const GRADE_WARM: GradeParams = {
+  ky: [0.015, 0.12, 0.3, 0.56, 0.8, 0.93, 1],
+  sat: [0.98, 1.18, 1.22],
+  tintS: [-0.008, 0.028], tintM: [-0.016, 0.022], tintH: [-0.022, 0.034],
+  vig: [0.2, 0.5],
+};
 export const GRADES: Record<"day" | "golden", GradeParams> = { day: GRADE_DAY2, golden: GRADE_GOLDEN2 };
 /** One strength (0..1, the effect's `amount`) per preset, set against the NEW world (bridge_world, 2026-10-31): full-strength
  *  presets overshot (day median Y' .59-.67 vs target .571, golden .58 vs .52); day 0.65 / golden 0.45 land at
  *  .54-.62 / ~.52. Re-fit the presets (grade.md 5.C) after the merge and raise these again. */
 export const GRADE_STRENGTH: Record<"day" | "golden", number> = { day: 1, golden: 1 };
-/** Apply the preset of a light to the effect (only touches uniforms when the light changes). */
-export function gradeFor(fx: GradeEffect, light: "day" | "golden") {
+const MOODS = { fall: GRADE_FALL, day: GRADE_DAY2, warm: GRADE_WARM };
+/** Apply a mood preset. `fall` is the high-altitude contrast, `warm` the low golden beats. */
+export function gradeFor(fx: GradeEffect, light: "fall" | "day" | "warm" | "golden") {
+  const key = light === "golden" ? "warm" : light;
   const tag = fx as unknown as { _light?: string };
-  if (tag._light !== light) { fx.set(GRADES[light]); tag._light = light; }
-  fx.amount = GRADE_STRENGTH[light];
+  if (tag._light !== key) { fx.set(MOODS[key]); tag._light = key; }
+  fx.amount = 1;
 }

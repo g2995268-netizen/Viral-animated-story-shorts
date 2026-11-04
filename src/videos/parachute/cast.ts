@@ -426,6 +426,20 @@ const park = (cam: CamInfo, t: number, out: Stage) => {
 };
 
 const JUMP: Outfit = { jacket: "#e07a32", pants: "#3a6ea5", boots: "#2a241e", hat: "cap", cap: "#f4f1ea", belt: "#1c1e24", skin: "#f0c29a" };
+const FACE_SWAPS = [1.3, 5.4, 15.0, 18.15, 22.3, 27.0, 29.3, 44.9, 56.3, 60.5];
+const faceAt = (t: number): Expr => {
+  if (t < 1.3) return "shock";
+  if (t < 5.4) return "nervous";
+  if (t < 15.0) return "stern";
+  if (t < 18.15) return "shock";
+  if (t < 22.3) return "pained";
+  if (t < 27.0) return "stern";
+  if (t < 29.3) return "shock";
+  if (t < 44.9) return "nervous";
+  if (t < 56.3) return "stern";
+  if (t < 60.5) return "shock";
+  return "relief";
+};
 
 const rag = (p: Pen, orange: boolean) => {
   const g = p.g;
@@ -470,13 +484,13 @@ export const stage = (id: number, t: number, _b: BridgeState, cam: CamInfo): Sta
   }
   const [x, y, z] = jumperAt(t);
   const dx = cam.pos.x - x, dz = cam.pos.z - z, len = Math.hypot(dx, dz) || 1;
-  const expr: Expr = t < 18.4 ? "shock" : t < 26 ? "stern" : t < 55.5 ? "nervous" : "relief";
+  const expr = faceAt(t);
   const who = { i: 4, o: JUMP, okey: "jumper" };
   const headDown = t > 27.05 && t < 28.9;
   if (id !== 1) {
     const pl = person(cam, who, x, y, z, viewOf(cam, x, z, dx / len, dz / len),
-      { mode: "fall", expr, blink: lidAt(t, 4), tilt: headDown ? 20 : 8 },
-      { mode: "stand", expr, blink: lidAt(t, 4) });
+      { mode: "fall", expr, blink: lidAt(t, 4, FACE_SWAPS), tilt: headDown ? 20 : 8 },
+      { mode: "stand", expr, blink: lidAt(t, 4, FACE_SWAPS) });
     if (headDown) pl.roll = 1.2;
     out.places.push(pl);
     if (y < D0 + 6) blob(out, x, D0, z);
@@ -495,8 +509,8 @@ export const stage = (id: number, t: number, _b: BridgeState, cam: CamInfo): Sta
       });
     }
   }
-  if (t > 55.55) {
-    const u = clamp01((t - 55.55) / 1.2);
+  if (t > 56.4) {
+    const u = clamp01((t - 56.4) / 0.7);
     out.fx.push({
       key: `canopy|${q(u, 12)}`, cw: 500, ch: 500, draw: canopy,
       x, y: y + 2.4 + u * 1.2, z, w: 1.2 + u * 3.2, h: 1.0 + u * 2.4,
