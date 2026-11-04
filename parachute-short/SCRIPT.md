@@ -1,50 +1,52 @@
-# «До земли шестьдесят секунд» — сценарий v1
+# Sixty seconds to the ground — script v2
 
-POV-шортс, около 60 секунд. Первый кадр — из глаз падающего: нераскрытый купол сверху, земля далеко внизу, альтиметр на запястье. Падение не прерывается. Высота только уменьшается.
+English POV short, about 60 seconds. Frame one is the falling jumper's view: a dead canopy overhead, the ground far below, an altimeter on the wrist. The fall never cuts away. Height only decreases.
 
-Цифры, на которых держится отсчёт:
+The spoken theme is what to do, in order, to raise the chance of surviving. Landing in water is named and dropped.
 
-- Стабильное падение животом к земле: около 200 км/ч, это 120 миль в час. Источник: статья Parachuting, Wikipedia.
-- 3300 метров на этой скорости длятся примерно шестьдесят секунд: 200 км/ч = 55,6 м/с, 3300 / 55,6 ≈ 59 с. К этому моменту тело уже набрало предельную скорость и быстрее не летит.
-- Expert CYPRES 2, красная кнопка: если вертикальная скорость выше примерно 35 м/с (78 миль в час), прибор открывает запасной на высоте около 750 футов, это 225 метров над землёй. Ниже примерно 40 метров открытие уже бесполезно, и прибор молчит. Масса блока около 198 граммов. Источник: CYPRES 2 User Guide и спецификация Expert CYPRES 2, cypres.aero.
+Numbers:
 
-Это не хроника одного прыжка. Это сценарий на реальной физике: стример, отцепка, кольцо запаски, автомат, который не спрашивает разрешения.
+- Stable belly-to-earth freefall is about 200 km/h, or 120 mph. Source: Parachuting, Wikipedia.
+- At that speed, 3,300 meters lasts about sixty seconds. 200 km/h is 55.6 m/s, and 3300 / 55.6 is about 59 s. The body is already at terminal velocity.
+- Expert CYPRES 2 fires the reserve if vertical speed is still above about 35 m/s (78 mph) at about 750 feet, roughly 225–230 meters above the ground. Below about 40 meters an opening no longer helps, and the device stops trying. The unit weighs about 198 grams. Source: CYPRES 2 User Guide and the Expert CYPRES 2 specifications, cypres.aero.
+- Water at that speed cannot move aside in time, so the stop is about as short as hitting pavement. An open canopy over water adds a second problem: lines can hold a jumper under. Deeper crumple — snow, a slope, treetops — spreads the same stop over more distance.
 
-Читать блок «Озвучка» дословно, одним ровным тоном, почти без пауз. 144 слова. В темпе прошлой озвучки это около **60–63 секунд**.
+This is a procedure, not a report of one jump.
 
-## Озвучка
+Read the voiceover straight through, one steady tone, almost no pauses. About 3.7 words a second. Target **58–62 seconds**.
 
-Твой парашют не раскрылся. До земли шестьдесят секунд.
+## Voiceover
 
-Три тысячи триста метров. Двести километров в час, живот к земле. Быстрее тело уже не полетит.
+Your parachute just failed. Sixty seconds to the ground. Here is the order that raises your odds.
 
-Над головой не купол, а тряпка. Хлопает и не держит.
-Сорок пять секунд. Город ещё пятно. Река нитка. Шоссе один штрих.
+Look at the altimeter. Three thousand three hundred meters. Two hundred kilometers an hour, belly to earth. That is as fast as this position gets. Spend it on the handles.
 
-Рука срывает отцепку. Основной уходит вверх. На спине пусто. Ветер больше не крепчает: воздух уже держит тебя, как ладонь из окна на трассе.
+Above you is a streamer, a rag that will not hold. Pull the cutaway. Left on your back, that rag can swallow the reserve.
 
-Тридцать секунд. Поля режутся на клетки. У поворота крыша, не квадратик. Машина становится машиной.
+Pull the reserve now. Do it while the ground is still a map.
 
-Двадцать. Пальцы ищут кольцо среди ремней. Первый хват пустой. Второй находит металл. Высота пополам, и земля вдвое крупнее. Поэтому долгое падение похоже на полёт.
+Stay flat. Head-down is faster, and faster is the wrong way.
 
-Десять. Карты нет. Двор, забор, бельё, миска. Собака смотрит не туда.
-Повезло: коробочка в двести граммов не ждёт храбрости.
-Не повезло: она молчала до стены.
-На двухстах тридцати метрах режет петлю сама. Запаска бьёт в плечи. Подошвы первые.
+Skip the lake. It looks softer than the road. At this speed the water cannot move aside, so it stops you about as hard as pavement. If a canopy opens over it, the lines can hold you under. Snow, a slope, or treetops stretch the stop. Water barely does.
 
-## Что будет в кадре, когда сценарий утвердят
+The air already capped your speed, like a hand out of a car window. A canopy can still slow you. The lake cannot.
 
-Превью только 540×960. Финал 1080×1920 после отдельных правок и утверждения превью.
+A two-hundred-gram box is on your back. Still fast near two hundred and thirty meters, and it cuts the reserve loop for you. Below forty meters, that is too late.
 
-Падение одно, сквозное. Меняется только крупность земли.
+Altitude. Cutaway. Reserve. Stay flat. Skip the water. Sixty seconds is enough for two pulls. It is a bad time to go swimming.
 
-| На словах | Кадр |
+## Picture, after this script is approved
+
+Preview is 540×960 only. The 1080×1920 final waits for a separate approval of that preview.
+
+One continuous fall. The ground only gets larger.
+
+| On these words | Frame |
 |---|---|
-| Первая фраза | POV: мёртвый купол сверху, земля картой внизу, стрелка на запястье |
-| «Сорок пять» | Город пятном, река ниткой, шоссе штрихом |
-| «Рука срывает отцепку» | Тряпка уходит вверх, в кадре только воздух |
-| «Тридцать» | Клетки полей, крыша, машина |
-| «Двадцать» | Свои пальцы и кольцо крупно, земля уже ближе |
-| «Десять» | Двор, забор, бельё, миска, собака |
-| «Режет петлю» | Рывок запаски в плечи |
-| «Подошвы» | Трава, купол над головой |
+| First sentence | POV: dead canopy overhead, the ground as a map, altimeter on the wrist |
+| "Pull the cutaway" | The rag leaves upward |
+| "Pull the reserve" | Hand on the second handle, fields still large |
+| "Skip the lake" | A lake beside a road, getting closer, and the jumper does not steer toward it |
+| "Snow, a slope, or treetops" | Those three surfaces pass under the boots |
+| "cuts the reserve loop" | The reserve hits the shoulders |
+| "two pulls" | Soles, and an open canopy overhead |
