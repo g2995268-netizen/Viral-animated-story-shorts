@@ -13,7 +13,7 @@ Numbers:
 
 This is a procedure, not a report of one jump.
 
-Read the voiceover straight through, one steady tone, almost no pauses. About 3.7 words a second. Target **58–62 seconds**.
+Read the voiceover straight through, one steady tone, almost no pauses. 223 words, about 3.7 a second. Target **58–62 seconds**.
 
 ## Voiceover
 
