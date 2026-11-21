@@ -51,7 +51,7 @@ export class World {
     this.sky.frustumCulled = false; this.sky.layers.set(NOINK); R.add(this.sky);
     this.hemi = new THREE.HemisphereLight("#cfe6ff", "#6c5c8c", 0.4);
     this.sun = new THREE.DirectionalLight("#fff0d6", 2.4);
-    this.sun.castShadow = true; this.sun.shadow.mapSize.set(2048, 2048);
+    this.sun.castShadow = false;
     R.add(this.hemi, this.sun, this.sun.target);
     this.rooms = buildRooms();
     R.add(this.rooms.hall, this.rooms.lock, this.rooms.street, this.rooms.lab);
@@ -88,7 +88,8 @@ export class World {
     this.sunCache.set(id, v); return v;
   }
 
-  update(id: number, f: number, cam: THREE.PerspectiveCamera, scene: THREE.Scene) {
+  update(id: number, f: number, cam: THREE.PerspectiveCamera, scene: THREE.Scene, lite = false) {
+    this.sun.castShadow = !lite;
     const s = SHOTS[id - 1];
     const L = LIGHTS[s.light];
     const K = LOOK[s.light];

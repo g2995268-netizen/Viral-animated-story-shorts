@@ -74,7 +74,7 @@ export type Who = {
 };
 
 const tier = (d: number): [number, number, number] =>
-  d < 3.2 ? [900, 1500, 1.5] : d < 7 ? [600, 1000, 1] : d < 14 ? [360, 600, 0.6] : [220, 360, 0.36];
+  d < 3.2 ? [480, 800, 0.8] : d < 7 ? [360, 600, 0.6] : d < 14 ? [240, 400, 0.4] : [160, 260, 0.26];
 
 const LID = [0.5, 1, 1, 0.5];
 const blinkOf = (t: number, i: number, force?: number) => {
@@ -209,9 +209,9 @@ export const poseCast = (pool: Pool, actors: Actor[], inp: CastIn) => {
     const dx = camPos.x - w.x, dz = camPos.z - w.z;
     if (dx * dx + dz * dz < 0.35) { a.mesh.visible = false; return; }
     const expr = exprFor(w.role, id, w.expr);
-    const phase = q((w.phase ?? t * (w.mode === "stroll" ? 1.3 : 0.35) + w.i * 0.17) % 1, 8);
-    const look = q(w.look ?? Math.sin(t * 0.7 + w.i) * (id === 6 ? 0.2 : 0.45), 4);
-    const headTilt = Math.round((w.headTilt ?? Math.sin(t * 1.3 + w.i) * 3) * 2) / 2;
+    const phase = q((w.phase ?? t * (w.mode === "stroll" ? 1.3 : 0.35) + w.i * 0.17) % 1, 4);
+    const look = q(w.look ?? Math.sin(t * 0.7 + w.i) * (id === 6 ? 0.2 : 0.45), 2);
+    const headTilt = Math.round((w.headTilt ?? Math.sin(t * 1.3 + w.i) * 3) / 3) * 3;
     const blink = blinkOf(t, w.i, w.blink);
     const wave = w.wave === undefined ? undefined : q(w.wave, 4);
     const d = Math.hypot(dx, dz, camPos.y - (y + 1.3));

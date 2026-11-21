@@ -28,6 +28,8 @@ const fwd = new THREE.Vector3();
 
 const Inner: React.FC<{ id: number }> = ({ id }) => {
   const f = useCurrentFrame();
+  const { height } = useVideoConfig();
+  const lite = height <= 1000;
   const { camera, scene } = useThree();
   const world = useMemo(() => new World(), []);
   const fx = useMemo(() => ({
@@ -38,18 +40,20 @@ const Inner: React.FC<{ id: number }> = ({ id }) => {
     grade: new GradeEffect(GRADES.alarm, GRADE_STRENGTH.alarm),
   }), [camera, scene]);
   React.useEffect(() => () => fx.ink.dispose(), [fx]);
+  // 540 preview skips ink, lens and extra samples so the whole short can render here.
+  // The 1080 composition turns them back on.
   const post = useMemo(() => (
-    <EffectComposer multisampling={2}>
-      <primitive object={fx.ink} dispose={null} />
-      <primitive object={fx.lens.pre} dispose={null} />
-      <primitive object={fx.lens.main} dispose={null} />
+    <EffectComposer multisampling={lite ? 0 : 2}>
+      {lite ? null : <primitive object={fx.ink} dispose={null} />}
+      {lite ? null : <primitive object={fx.lens.pre} dispose={null} />}
+      {lite ? null : <primitive object={fx.lens.main} dispose={null} />}
       <primitive object={fx.bloom} dispose={null} />
       <primitive object={fx.tone} dispose={null} />
       <primitive object={fx.grade} dispose={null} />
     </EffectComposer>
-  ), [fx]);
+  ), [fx, lite]);
   const cam = camera as THREE.PerspectiveCamera;
-  const target = world.update(id, f, cam, scene);
+  const target = world.update(id, f, cam, scene, lite);
   noInkFallback(world.root);
   const d = dofAt(f);
   cam.getWorldDirection(fwd);
